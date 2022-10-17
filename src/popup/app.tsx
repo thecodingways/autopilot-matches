@@ -39,6 +39,15 @@ const scriptBody = `
 
   function explorePhotos() {
     const tappableViews = Array.from(document.querySelectorAll('.tappable-view'))
+    if (!tappableViews || !tappableViews[1]) {
+      console.log('debug::WAIT::');
+      const wait = new Promise((resolve) => {
+        setTimeout(() => {
+          return resolve()
+        }, 1500)
+      })
+      return wait.then(() => explorePhotos())
+    }
     const otherPhotoIndicators = Array
         .from(tappableViews[1].querySelectorAll('button'))
         .filter(button => button.className.includes('background-tappy-indicator-inactive'))
@@ -167,7 +176,7 @@ export const App = () => {
           color: 'white'
         }}
       >
-        Start swiping
+        Start swiping on Tinder
       </button>
     </div>
   );
