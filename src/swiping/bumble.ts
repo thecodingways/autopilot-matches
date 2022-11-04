@@ -33,25 +33,6 @@ function _randomRange(min, max) {
   return ~~(Math.random() * (max - min + 1)) + min
 }
 
-function fireKey(el, keyCode, key)
-{
-    //Set key to corresponding code. This one is set to the left arrow key.
-    if(document.createEventObject)
-    {
-        let eventObj = document.createEventObject();
-        eventObj.keyCode = keyCode;
-        eventObj.key = key;
-        el.fireEvent("onkeydown", eventObj);   
-    }else if(document.createEvent)
-    {
-        let eventObj = document.createEvent("Events");
-        eventObj.initEvent("keydown", true, true);
-        eventObj.which = key;
-        eventObj.key = key;
-        el.dispatchEvent(eventObj);
-    }
-} 
-
 function explorePhotos() {
   const scrollableViews = Array.from(document.querySelectorAll('.encounters-album__story'))
   if (!scrollableViews || !scrollableViews[1]) {
@@ -90,10 +71,10 @@ function explorePhotos() {
       console.log('debug::upOrDown::', upOrDown, { currentIdx, scrollableViews: scrollableViews.length })
       if (upOrDown === 'up') {
         currentIdx -= 1;
-        fireKey(window, 38, 'ArrowUp');
+        document.getElementById('x-scroll-up').click()
       } else if (upOrDown === 'down') {
         currentIdx += 1;
-        fireKey(window, 40, 'ArrowDown');
+        document.getElementById('x-scroll-down').click()
       }
       setTimeout(goNextPhoto, _randomMS(1000))
     }
@@ -158,6 +139,68 @@ function findNextMatch() {
 
 window._automatcherExecution = setTimeout(findNextMatch, 1000)
 `;
+
+/**
+ * INSERT THIS BEFORE using the extension.
+
+
+function onClickDown() {
+  function fireKey(el, keyCode, key)
+  {
+      //Set key to corresponding code. This one is set to the left arrow key.
+      if(document.createEventObject) {
+        console.log('#1')
+          let eventObj = document.createEventObject();
+          eventObj.keyCode = keyCode;
+          eventObj.key = key;
+          el.fireEvent("onkeydown", eventObj);   
+      } else if(document.createEvent) {
+        console.log('#2')
+          let eventObj = document.createEvent("Events");
+          eventObj.initEvent("keydown", true, true);
+          eventObj.which = key;
+          eventObj.key = key;
+          el.dispatchEvent(eventObj);
+      }
+  }
+  fireKey(window, 40, 'ArrowDown');
+}
+
+function onClickUp() {
+  function fireKey(el, keyCode, key)
+  {
+      //Set key to corresponding code. This one is set to the left arrow key.
+      if(document.createEventObject) {
+        console.log('#1')
+          let eventObj = document.createEventObject();
+          eventObj.keyCode = keyCode;
+          eventObj.key = key;
+          el.fireEvent("onkeydown", eventObj);   
+      } else if(document.createEvent) {
+        console.log('#2')
+          let eventObj = document.createEvent("Events");
+          eventObj.initEvent("keydown", true, true);
+          eventObj.which = key;
+          eventObj.key = key;
+          el.dispatchEvent(eventObj);
+      }
+  }
+  fireKey(window, 40, 'ArrowUp');
+}
+
+
+const downButton = document.createElement('button')
+downButton.setAttribute('id', 'x-scroll-down');
+downButton.innerText = 'Arrow move Down';
+downButton.addEventListener('click', onClickDown)
+const upButton = document.createElement('button')
+upButton.setAttribute('id', 'x-scroll-up');
+upButton.innerText = 'Arrow move UP';
+upButton.addEventListener('click', onClickUp)
+document.body.appendChild(downButton)
+document.body.appendChild(upButton)
+
+ */
 
 export const startBumbleSwiping = () => {
   const matchScript = document.createElement('script');

@@ -1,3 +1,4 @@
+import { bumbleSwipingScriptBody, startBumbleSwiping } from '@/swiping/bumble';
 import { startTinderSwiping, tinderSwipingScriptBody } from '@/swiping/tinder';
 
 const extensionVersion = chrome.runtime.getManifest().manifest_version;
@@ -31,12 +32,12 @@ export const App = () => {
         if (extensionVersion === 3) {
           chrome.scripting.executeScript({
             target: { tabId: curId },
-            func: startTinderSwiping,
+            func: startBumbleSwiping,
             args: []
           });
         } else {
           chrome.tabs.executeScript(curId, {
-            code: tinderSwipingScriptBody
+            code: bumbleSwipingScriptBody
           });
         }
       }
@@ -60,7 +61,7 @@ export const App = () => {
       <button
         onClick={handleBumbleClick}
         style={{
-          background: '#ffff000',
+          background: '#fff000',
           borderRadius: 4,
           fontSize: 16,
           padding: '10px 15px',
