@@ -65,7 +65,7 @@ export const App = () => {
           borderRadius: 4,
           fontSize: 16,
           padding: '10px 15px',
-          color: 'white'
+          color: 'black'
         }}
       >
         Start swiping on Bumble

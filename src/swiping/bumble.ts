@@ -7,7 +7,11 @@ let likeButton, dislikeButton;
 
 function _getLikeButton() {
   if (!likeButton) {
-    likeButton = document.querySelectorAll('.encounters-controls__actions .encounters-controls__action')[2].children[0]
+    try {
+      likeButton = document.querySelectorAll('.encounters-controls__actions .encounters-controls__action')[2].children[0]
+    } catch {
+      likeButton = document.querySelectorAll('.encounters-controls__actions .encounters-controls__action')[1].children[0]
+    }
   }
   if (!likeButton) {
     console.error('Could not find the like button')
@@ -53,30 +57,34 @@ function explorePhotos() {
       return;
     }
     function goNextPhoto() {
-      attempts += 1
-      if (attempts >= maxContinue) {
-        return resolve();
-      }
-      const upOrDown = (() => {
-        if (currentIdx === 0) {
-            return 'down';
+      try {
+        attempts += 1
+        if (attempts >= maxContinue) {
+          return resolve();
         }
-        if (currentIdx === scrollableViews.length - 1) {
-            return 'up'
+        const upOrDown = (() => {
+          if (currentIdx === 0) {
+              return 'down';
+          }
+          if (currentIdx === scrollableViews.length - 1) {
+              return 'up'
+          }
+          const rand = Math.random()
+          console.log('debug::', rand);
+          return rand > 0.25 ? 'down' : 'up';
+        })();
+        console.log('debug::upOrDown::', upOrDown, { currentIdx, scrollableViews: scrollableViews.length })
+        if (upOrDown === 'up') {
+          currentIdx -= 1;
+          document.getElementById('x-scroll-up').click()
+        } else if (upOrDown === 'down') {
+          currentIdx += 1;
+          document.getElementById('x-scroll-down').click()
         }
-        const rand = Math.random()
-        console.log('debug::', rand);
-        return rand > 0.25 ? 'down' : 'up';
-      })();
-      console.log('debug::upOrDown::', upOrDown, { currentIdx, scrollableViews: scrollableViews.length })
-      if (upOrDown === 'up') {
-        currentIdx -= 1;
-        document.getElementById('x-scroll-up').click()
-      } else if (upOrDown === 'down') {
-        currentIdx += 1;
-        document.getElementById('x-scroll-down').click()
+        setTimeout(goNextPhoto, _randomMS(1000))
+      } catch (e) {
+        resolve();
       }
-      setTimeout(goNextPhoto, _randomMS(1000))
     }
     goNextPhoto();
   });
